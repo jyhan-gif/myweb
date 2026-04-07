@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAUNCE 4/5 분석 — 전사 + 전략 + 센터별</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Apple SD Gothic Neo',sans-serif;background:#f4f4f4;color:#1a1a1a;font-size:13px}
+.top{background:#111;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top h1{font-size:15px;font-weight:700}
+.top-sub{font-size:11px;color:#aaa}
+.nav{background:#fff;border-bottom:1px solid #e0e0e0;display:flex;overflow-x:auto;position:sticky;top:0;z-index:100}
+.ntab{padding:11px 20px;font-size:13px;cursor:pointer;border-bottom:3px solid transparent;color:#888;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;font-weight:600}
+.ntab.on{color:#111;border-bottom-color:#111}
+.page{display:none;padding:20px;max-width:1000px;margin:0 auto}.page.on{display:block}
+/* cards */
+.krow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:600px){.krow{grid-template-columns:1fr 1fr}}
+.kcard{background:#fff;border-radius:8px;padding:12px 14px;border:1px solid #eee}
+.kl{font-size:10px;color:#999;margin-bottom:3px}
+.kv{font-size:20px;font-weight:700}
+.ks{font-size:10px;color:#aaa;margin-top:2px}
+/* sections */
+.sec{background:#fff;border-radius:8px;padding:14px 16px;margin-bottom:12px;border:1px solid #eee}
+.sttl{font-size:12px;font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #f0f0f0}
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{font-size:10px;font-weight:700;color:#999;padding:5px 7px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:5px 7px;border-bottom:1px solid #f5f5f5;text-align:right;white-space:nowrap}
+td:first-child{text-align:left;font-weight:600}
+tr:hover td{background:#fafafa}
+.dn{color:#e53935}.up{color:#43a047}.warn{color:#fb8c00}.dim{color:#ccc}
+/* cards for strategy */
+.scard{border-radius:8px;padding:14px 16px;margin-bottom:10px;border:1px solid #eee;background:#fff}
+.scard-r{border-left:4px solid #e53935;border-radius:0 8px 8px 0}
+.scard-o{border-left:4px solid #fb8c00;border-radius:0 8px 8px 0}
+.scard-g{border-left:4px solid #43a047;border-radius:0 8px 8px 0}
+.scard-b{border-left:4px solid #1e88e5;border-radius:0 8px 8px 0}
+.st{font-size:12px;font-weight:700;margin-bottom:6px}
+.sb{font-size:12px;color:#555;line-height:1.8}
+.tag{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;margin-right:4px}
+.tr{background:#ffebee;color:#c62828}.to{background:#fff3e0;color:#e65100}
+.tg{background:#e8f5e9;color:#2e7d32}.tb{background:#e3f2fd;color:#1565c0}
+.tgr{background:#f5f5f5;color:#666}
+/* center page */
+.csel-wrap{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+select{padding:7px 12px;border:1px solid #ddd;border-radius:6px;font-size:13px;background:#fff;cursor:pointer}
+.legend{display:flex;gap:12px;font-size:10px;color:#888;margin-top:6px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:3px}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.insight{border-radius:6px;padding:9px 12px;font-size:11px;color:#555;line-height:1.8;margin-bottom:6px}
+.insight.red{background:#fff8f8;border-left:3px solid #e53935}
+.insight.orange{background:#fffbf5;border-left:3px solid #fb8c00}
+.insight.green{background:#f5fbf5;border-left:3px solid #43a047}
+.insight.blue{background:#f5f9ff;border-left:3px solid #1e88e5}
+.insight.gray{background:#f9f9f9;border-left:3px solid #bbb}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.fn{font-size:10px;color:#bbb;margin-top:5px}
+.dy{color:#3266ad;font-weight:700}.dw{color:#73726c;font-weight:700}.dt{color:#D85A30;font-weight:700}
+tr.hl td{background:#fffde7}
+</style></head><body>
+
+<div class="top">
+  <h1>VAUNCE 2026-04-05(일) 분석 리포트</h1>
+  <div style="background:#1a1a1a;padding:6px 20px;font-size:10px;color:#888;line-height:1.7">
+  <b style="color:#ccc">집계 기준</b> &nbsp;|&nbsp;
+  총방문자 = 일반이용권(일반+키즈) + 보호자이용권 + 단체이용권(9건, 분석 제외) &nbsp;|&nbsp;
+  이용자 = 일반이용권 중 키즈패턴(80~109cm·키즈·유아 등) 제외 나머지 &nbsp;|&nbsp;
+  키즈 = 일반이용권 중 티켓명에 키즈·80~99cm·80~109cm·80~119cm·100~119cm·유아·미취학 포함 &nbsp;|&nbsp;
+  일반티켓 = 이용권 중 주말+1시간·만우절특가·다회권·정기권·온라인 제외 나머지 (배틀컴뱃·오픈런·반일권 등 포함) &nbsp;|&nbsp;
+  주말+1시간 = 4/5부터 앱 전용, 37개 확정 티켓명 기준 (전년·전주는 0건)
+</div>
+<div class="top-sub">전년 25/04/06(일) · 전주 26/03/29(일) 비교 · 입장/퇴장 기반 점유율 포함</div>
+</div>
+
+<div class="nav">
+  <button class="ntab on" onclick="goPage('overview',this)">전사 요약</button>
+  <button class="ntab" onclick="goPage('cause',this)">원인 분석</button>
+  <button class="ntab" onclick="goPage('occ',this)">점유율·회전율</button>
+  <button class="ntab" onclick="goPage('strategy',this)">전략 제언</button>
+  <button class="ntab" onclick="goPage('center',this)">센터별 상세</button>
+</div>
+
+<!-- ① 전사 요약 -->
+<div id="page-overview" class="page on">
+  <div class="krow">
+    <div class="kcard"><div class="kl">총방문자</div><div class="kv" style="color:#e53935">6,701명</div><div class="ks">전년 7,902명 <b style="color:#e53935">-15%</b> · 전주 7,317명 <b style="color:#e53935">-8%</b></div></div>
+    <div class="kcard"><div class="kl">일반티켓 이용자</div><div class="kv" style="color:#e53935">2,190명</div><div class="ks">전년 3,763명 <b style="color:#e53935">-42%</b> — 매출 직결</div></div>
+    <div class="kcard"><div class="kl">주말+1시간</div><div class="kv" style="color:#fb8c00">1,500명</div><div class="ks">전년·전주 0건 → 4/5 신규 도입 · 이용자의 35.5%</div></div>
+    <div class="kcard"><div class="kl">앱 채널 비중</div><div class="kv" style="color:#fb8c00">60.6%</div><div class="ks">전년 11.7% → 전주 53.9% → 당일 60.6%</div></div>
+    <div class="kcard"><div class="kl">피크 점유 (15:30)</div><div class="kv">2,551명</div><div class="ks">전년 2,855명 <b style="color:#e53935">-11%</b> · 피크내 +1h <b style="color:#fb8c00">33%</b></div></div>
+    <div class="kcard"><div class="kl">이용자 평균 체류</div><div class="kv" style="color:#fb8c00">146분</div><div class="ks">전년 135분 <b style="color:#fb8c00">+11분</b> — 주말+1h 영향</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sttl">3일 비교 — 방문자 구조</div>
+    <table>
+      <thead><tr><th style="width:130px">구분</th><th class="dy">25/04/06 전년</th><th class="dw">26/03/29 전주</th><th class="dt">26/04/05 당일</th><th>전년比</th><th>전주比</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:700">총방문자</td><td>7,902</td><td>7,317</td><td style="font-weight:700">6,701</td><td class="dn">-15%</td><td class="dn">-8%</td></tr>
+        <tr><td style="padding-left:14px">앱_보호자</td><td class="dim">0</td><td>1,459</td><td>1,414</td><td class="warn">신규↑</td><td>-3%</td></tr>
+        <tr><td style="padding-left:14px">앱_이용자 <span style="font-size:9px;color:#aaa">※단체9건 제외</span></td><td>923</td><td>2,487</td><td>2,645</td><td class="warn">+187%</td><td>+6%</td></tr>
+        <tr><td style="padding-left:14px">포스_보호자</td><td>2,966</td><td>1,273</td><td>1,061</td><td class="dn">-64%</td><td class="dn">-17%</td></tr>
+        <tr><td style="padding-left:14px">포스_이용자</td><td>3,477</td><td>1,932</td><td>1,498</td><td class="dn">-57%</td><td class="dn">-22%</td></tr>
+        <tr><td style="padding-left:14px">온라인</td><td>535</td><td>161</td><td>80</td><td class="dn">-85%</td><td class="dn">-50%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="sttl">티켓특성별</div>
+    <table>
+      <thead><tr><th style="width:130px">특성</th><th class="dy">25/04/06</th><th class="dw">26/03/29</th><th class="dt">26/04/05</th><th>당일비중</th><th>전년比</th></tr></thead>
+      <tbody>
+        <tr><td>일반티켓</td><td>3,511</td><td>3,881</td><td>2,182</td><td>32.6%</td><td class="dn">-38%</td></tr>
+        <tr class="hl"><td>주말+1시간 <span style="font-size:9px;background:#fff3e0;color:#e65100;padding:1px 4px;border-radius:2px">4/5 신규</span></td><td class="dim">0</td><td class="dim">0</td><td style="font-weight:700">1,500</td><td class="warn">22.4%</td><td class="warn">신규도입</td></tr>
+        <tr><td>보호자</td><td>2,966</td><td>2,732</td><td>2,475</td><td>36.9%</td><td class="dn">-16%</td></tr>
+        <tr class="hl"><td>만우절특가</td><td class="dim">0</td><td class="dim">0</td><td style="font-weight:700">206</td><td>3.1%</td><td class="warn">신규</td></tr>
+        <tr><td>다회권</td><td>367</td><td>335</td><td>173</td><td>2.6%</td><td class="dn">-53%</td></tr>
+        <tr><td>온라인티켓</td><td>535</td><td>161</td><td>80</td><td>1.2%</td><td class="dn">-85%</td></tr>
+        <tr><td>정기권</td><td>30</td><td>87</td><td>74</td><td>1.1%</td><td class="up">+147%</td></tr>
+        <tr><td>오픈런이벤트 <span style="font-size:9px;background:#f5f5f5;color:#888;padding:1px 4px;border-radius:2px">전년만</span></td><td>240</td><td class="dim">0</td><td class="dim">0</td><td class="dim">0%</td><td>전년만 해당</td></tr>
+        <tr><td>기간한정특가</td><td class="dim">0</td><td>53</td><td class="dim">0</td><td class="dim">0%</td><td>-</td></tr>
+      </tbody>
+    </table>
+    <div class="fn">노란 배경 = 프로모션·할인 권종</div>
+  </div>
+
+  <div class="two">
+    <div class="sec">
+      <div class="sttl">유형별 (일반·키즈·보호자)</div>
+      <table>
+        <thead><tr><th>유형</th><th class="dy">전년</th><th class="dw">전주</th><th class="dt">당일</th><th>전년比</th></tr></thead>
+        <tbody>
+          <tr><td>일반</td><td>4,610</td><td>4,362</td><td>4,053</td><td class="dn">-12%</td></tr>
+          <tr><td>키즈</td><td>325</td><td>218</td><td>170</td><td class="dn">-48%</td></tr>
+          <tr><td>보호자</td><td>2,966</td><td>2,732</td><td>2,475</td><td class="dn">-17%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sec">
+      <div class="sttl">체류시간 (이용자 기준)</div>
+      <table>
+        <thead><tr><th>특성</th><th>평균</th><th>인원</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td>주말+1시간</td><td class="warn">180분</td><td>1,509명</td></tr>
+          <tr><td>보호자</td><td>139분</td><td>2,469명</td></tr>
+          <tr class="hl"><td>만우절특가</td><td>127분</td><td>206명</td></tr>
+          <tr><td>일반티켓 (기준)</td><td>125분</td><td>2,170명</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ② 원인 분석 -->
+<div id="page-cause" class="page">
+  <div class="scard scard-r">
+    <div class="st"><span class="tag tr">핵심 1</span> 일반티켓 이용자 -1,573명 → 주말+1시간 +1,500명이 4/5 신규 도입됐다</div>
+    <div class="sb">방문자 수는 -15% 감소했지만 구조가 바뀌었다. 일반티켓 이용자가 감소한 날에 주말+1시간이 신규 도입됐다. 이용자 중 프로모션·할인 비중이 <b>0% → 35.5%</b>로 급격히 커졌다. 방문자가 줄어든 게 아니라 <b>수익 기여가 낮은 방문으로 교체된 것</b>이 핵심이다.</div>
+  </div>
+  <div class="scard scard-r">
+    <div class="st"><span class="tag tr">핵심 2</span> 앱이 상시 할인 채널이 되면서 포스·온라인 정가 수요를 흡수했다</div>
+    <div class="sb">포스 이용자 3,477→1,498명(-57%), 온라인 535→80명(-85%). 이 수요는 사라진 게 아니라 앱(923→2,645명)으로 이동했다. 현장에서도 앱을 열면 즉시 할인이 되므로 <b>현장 정가 구매의 의미가 없어졌다</b>. 2026-01 요금 인상 효과가 앱 할인에 상쇄된다.</div>
+  </div>
+  <div class="scard scard-o">
+    <div class="st"><span class="tag to">구조적</span> 보호자 채널은 포스→앱 이동일 뿐, 이탈이 아니다</div>
+    <div class="sb">포스_보호자 2,966→1,061명 급감처럼 보이나 앱_보호자 0→1,414명으로 신규 생성됐다. 전체 보호자 수는 -16%로 방문자 감소율과 동일. <b>보호자 채널 이동은 매출 감소의 직접 원인이 아니다.</b></div>
+  </div>
+  <div class="scard scard-o">
+    <div class="st"><span class="tag to">복합</span> 만우절 특가 206명 — 단가 -30% + 피크 좌석 점유</div>
+    <div class="sb">4/1 30% 할인 판매분 206명이 4/5에 집중 사용. 체류는 정가와 동일(127분)하나 단가 손실은 발생. 주말+1시간으로 이미 빡빡한 피크에 추가 할인 이용객이 겹쳤다.</div>
+  </div>
+  <div class="scard scard-o">
+    <div class="st"><span class="tag to">이탈 신호</span> 다회권 -53% — "묶음구매"에서 "그때그때 앱 할인"으로 고객 행동 변화</div>
+    <div class="sb">다회권 367→173명(-53%). 앱 상시 할인 단가가 다회권 단가를 압박하면서 재방문 충성 고객의 구매 전략이 바뀌었다. <b>다회권 감소는 충성 고객 이탈의 선행 지표다.</b></div>
+  </div>
+  <div class="scard scard-o">
+    <div class="st"><span class="tag to">이탈 신호</span> 키즈 -48% — 고단가 가족 세그먼트 이탈</div>
+    <div class="sb">키즈 325→170명(-48%). 키즈 고객은 보호자 동반 비율이 높고 F&amp;B 소비도 많은 고단가 세그먼트다. <b>원주·천안·용인처럼 키즈 비중이 높은 센터가 방문자를 상대적으로 방어했다</b>는 점이 이를 뒷받침한다.</div>
+  </div>
+</div>
+
+<!-- ③ 점유율·회전율 -->
+<div id="page-occ" class="page">
+  <div class="krow">
+    <div class="kcard"><div class="kl">피크 점유 (15:30)</div><div class="kv">2,551명</div><div class="ks">전년 2,855명 <b style="color:#e53935">-11%</b></div></div>
+    <div class="kcard"><div class="kl">수익기여 피크 (추정)</div><div class="kv" style="color:#e53935">~1,788명</div><div class="ks">전년比 <b style="color:#e53935">-37%</b> — 주말+1h 제외 시</div></div>
+    <div class="kcard"><div class="kl">21시 잔류</div><div class="kv" style="color:#e53935">74명</div><div class="ks">전년 5명 → <b style="color:#e53935">14배</b> 증가</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sttl">전사 시간대별 동시 점유</div>
+    <div style="position:relative;width:100%;height:220px;margin:8px 0"><canvas id="chartOccMain"></canvas></div>
+    <div class="legend">
+      <span><i style="background:#3266ad"></i>25/04/06 전년</span>
+      <span><i style="background:#73726c"></i>26/03/29 전주</span>
+      <span><i style="background:#D85A30"></i>26/04/05 당일</span>
+      <span><i style="background:#FFA726;opacity:0.6"></i>당일 주말+1h만</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sttl">센터별 회전율 위험도 (4/5 기준)</div>
+    <table>
+      <thead><tr>
+        <th style="width:70px">센터</th>
+        <th>피크시간</th><th>피크점유</th>
+        <th>전년피크</th>
+        <th>피크내+1h%</th>
+        <th>18시이후잔류</th>
+        <th>위험도</th>
+      </tr></thead>
+      <tbody id="occTable"></tbody>
+    </table>
+    <div class="fn">피크내 +1h 40% 이상 = 신규 입장 수용력 대폭 감소 / 18시이후 잔류 150명+ = 마감 운영 부담</div>
+  </div>
+</div>
+
+<!-- ④ 전략 제언 -->
+<div id="page-strategy" class="page">
+  <div class="scard scard-r">
+    <div class="st"><span class="tag tr">즉시</span> 주말+1시간 — 시간대 제한 또는 F&B 쿠폰으로 전환</div>
+    <div class="sb">1,500명 × 55분 = 약 <b>1,375 인시(人時)의 공간 기회비용</b>이 사라졌다. 피크(13~16시) 약 33%를 +1h가 점유해 오후 신규 입장 수용력이 줄었고 21시 잔류가 전년 5명→74명으로 폭증했다.<br><br>
+    → <b>오전(10~12시) 입장에만 적용, 오후 피크(13~16시) 제외</b> 검토. 또는 +1시간 대신 <b>F&amp;B 할인쿠폰으로 대체</b>해 수익도 발생하고 회전율도 회복. 의왕·삼성·남양주·동대구는 18시이후 잔류 부담도 크므로 우선 적용.</div>
+  </div>
+  <div class="scard scard-r">
+    <div class="st"><span class="tag tr">즉시</span> 앱 당일 할인 차단 — 사전 구매(1~2일 전)에만 할인 적용</div>
+    <div class="sb">현장에서 앱을 열면 바로 할인이 된다. 이 구조에서는 현장 정가 구매 이유가 없다. <b>앱 할인은 사전 구매에만 적용</b>하고 당일 앱 결제는 소폭 할인(5~10%) 또는 정가로 제한. 현장 결제에 음료쿠폰·양말 등 혜택 추가. 요금 인상 효과를 실질적으로 회수하는 구조.</div>
+  </div>
+  <div class="scard scard-o">
+    <div class="st"><span class="tag to">단기</span> 다회권 — "경험 우선권"으로 재포지셔닝</div>
+    <div class="sb">다회권에 <b>피크시간대 우선 입장(예약제), 동반 보호자 할인, 전용 라커</b> 등 앱 단건 할인으로 살 수 없는 혜택 부여. 단순 단가 경쟁에서 벗어나야 한다.</div>
+  </div>
+  <div class="scard scard-o">
+    <div class="st"><span class="tag to">단기</span> 키즈 특화 — 고단가 가족 세그먼트 회복</div>
+    <div class="sb">키즈 전용 시간대(오전 10~12시), <b>키즈+보호자 패키지 가격 신설</b>. 원주·천안·용인처럼 키즈 비중이 높은 센터가 방문자를 방어했다. 앱에서 키즈 권종을 전면 배치해 앱 이용 키즈 가족 접근성 개선.</div>
+  </div>
+  <div class="scard scard-g">
+    <div class="st"><span class="tag tg">중기</span> 원주 모델 확산 — 멀티 콘텐츠가 단가·회전율 동시 방어</div>
+    <div class="sb">원주는 카트·워터룸으로 주말+1시간 비중 8.5%, 포스 이용자 233명으로 전국 1위. <b>부가 콘텐츠가 있으면 프로모션 의존도가 낮아지고 회전율도 살아난다.</b> 하남·남양주·영통 등 구조 붕괴형 센터 우선 적용.</div>
+  </div>
+  <div class="scard scard-g">
+    <div class="st"><span class="tag tg">중기</span> 유형 A 센터(세종·남양주·하남·영통) — 프로모션 대신 CRM 재방문 설계</div>
+    <div class="sb">프로모션을 더 해도 회복이 안 된다. 이미 정가 수요가 이탈했거나 경쟁 대체재가 생긴 것이다. <b>상권 재분석 후 차별화 설정 + 기존 고객 재방문 설계(CRM 기반 리타기팅)</b>로 프로모션 예산 전환.</div>
+  </div>
+  <div class="scard scard-b">
+    <div class="st"><span class="tag tb">모니터링</span> 지금 당장 추적해야 할 지표</div>
+    <div class="sb">① <b>시간대별 신규 입장 가능 인원(정원 - 현재 점유)</b> — 주말+1시간 전후 비교<br>
+    ② <b>앱 당일 구매 vs 사전 구매 비율</b> — 당일이 높으면 현장 단가 잠식 진행 중<br>
+    ③ <b>다회권 신규 발행 vs 소진 속도</b> — 충성 고객 이탈 조기 경보<br>
+    ④ <b>키즈 이용자 비중 주차별 추이</b> — 가족 방문 구조 변화 선행 지표<br>
+    ⑤ <b>18시 이후 잔류 인원(센터별)</b> — 운영 효율 + 주말+1시간 정책 효과 검증</div>
+  </div>
+</div>
+
+<!-- ⑤ 센터별 상세 -->
+<div id="page-center" class="page">
+  <div class="csel-wrap">
+    <span style="font-size:12px;color:#888;font-weight:700">센터 선택</span>
+    <select id="csel" onchange="renderC(this.value)"></select>
+    <span style="font-size:11px;color:#aaa">전년·전주·당일 전체 자동 비교</span>
+  </div>
+  <div id="centerMain"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const DATA = {"거제":{"y":{"total":334,"user":211,"guard":123,"kids":1,"general":210,"danch":0,"app_guard":0,"app_user":7,"pos_guard":123,"pos_user":199,"online":5,"dwell_avg":114.3,"dwell_med":119.0,"tt":{"일반티켓":206,"보호자":123,"온라인":5},"peak_t":"12:00","peak_v":118,"peak_p1h":0,"late_total":27,"occ":[0,0,84,118,79,74,81,74,44,27,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":254,"user":151,"guard":103,"kids":0,"general":151,"danch":0,"app_guard":9,"app_user":19,"pos_guard":94,"pos_user":131,"online":1,"dwell_avg":124.7,"dwell_med":118.0,"tt":{"일반티켓":144,"보호자":103,"다회권":5,"온라인":1,"기간한정특가":1},"peak_t":"12:00","peak_v":98,"peak_p1h":0,"late_total":14,"occ":[0,0,65,98,64,62,80,82,40,10,4,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":236,"user":142,"guard":94,"kids":0,"general":142,"danch":0,"app_guard":22,"app_user":38,"pos_guard":72,"pos_user":104,"online":0,"dwell_avg":133.8,"dwell_med":121.0,"tt":{"일반티켓":110,"보호자":94,"주말+1시간":15,"다회권":10,"만우절특가":7},"peak_t":"12:00","peak_v":85,"peak_p1h":3,"late_total":40,"occ":[0,0,51,85,80,61,70,72,56,31,9,0,0],"occ_p1h":[0,0,1,3,3,4,9,12,10,7,1,0,0]}},"광교":{"y":null,"w":{"total":259,"user":134,"guard":125,"kids":0,"general":134,"danch":0,"app_guard":92,"app_user":107,"pos_guard":33,"pos_user":22,"online":5,"dwell_avg":137.5,"dwell_med":121.0,"tt":{"보호자":125,"일반티켓":119,"다회권":6,"온라인":5,"정기권":4},"peak_t":"16:00","peak_v":131,"peak_p1h":0,"late_total":120,"occ":[0,0,27,44,44,64,102,131,93,75,28,17,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":233,"user":118,"guard":115,"kids":0,"general":118,"danch":0,"app_guard":83,"app_user":97,"pos_guard":32,"pos_user":16,"online":5,"dwell_avg":134.8,"dwell_med":121.0,"tt":{"보호자":115,"일반티켓":71,"주말+1시간":25,"정기권":8,"만우절특가":6,"온라인":5,"다회권":3},"peak_t":"14:00","peak_v":84,"peak_p1h":13,"late_total":64,"occ":[0,0,43,54,57,84,76,83,77,45,10,9,0],"occ_p1h":[0,0,5,8,12,13,12,12,3,1,1,0,0]}},"광주":{"y":{"total":191,"user":122,"guard":69,"kids":0,"general":122,"danch":0,"app_guard":0,"app_user":4,"pos_guard":69,"pos_user":110,"online":8,"dwell_avg":188.8,"dwell_med":206.0,"tt":{"일반티켓":108,"보호자":69,"온라인":8,"다회권":3,"오픈런이벤트":2,"정기권":1},"peak_t":"15:00","peak_v":119,"peak_p1h":0,"late_total":63,"occ":[0,0,19,37,53,88,119,110,113,49,12,2,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":110,"user":70,"guard":40,"kids":0,"general":70,"danch":0,"app_guard":13,"app_user":30,"pos_guard":27,"pos_user":38,"online":2,"dwell_avg":154.3,"dwell_med":145.0,"tt":{"일반티켓":63,"보호자":40,"정기권":4,"온라인":2,"다회권":1},"peak_t":"17:00","peak_v":45,"peak_p1h":0,"late_total":47,"occ":[0,0,21,27,36,38,41,33,45,32,15,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":147,"user":94,"guard":53,"kids":0,"general":94,"danch":0,"app_guard":34,"app_user":55,"pos_guard":19,"pos_user":38,"online":1,"dwell_avg":139.0,"dwell_med":120.0,"tt":{"일반티켓":55,"보호자":53,"주말+1시간":27,"만우절특가":7,"정기권":2,"다회권":2,"온라인":1},"peak_t":"15:00","peak_v":60,"peak_p1h":19,"late_total":31,"occ":[0,0,21,49,50,48,60,51,41,18,13,0,0],"occ_p1h":[0,0,5,10,10,13,19,13,9,2,2,0,0]}},"구미":{"y":{"total":249,"user":143,"guard":106,"kids":0,"general":143,"danch":0,"app_guard":0,"app_user":21,"pos_guard":106,"pos_user":105,"online":17,"dwell_avg":152.5,"dwell_med":122.0,"tt":{"보호자":106,"일반티켓":84,"오픈런이벤트":34,"온라인":17,"다회권":7,"정기권":1},"peak_t":"14:00","peak_v":111,"peak_p1h":0,"late_total":114,"occ":[0,0,58,77,90,111,79,47,61,59,36,19,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":204,"user":113,"guard":91,"kids":0,"general":113,"danch":0,"app_guard":46,"app_user":62,"pos_guard":45,"pos_user":44,"online":7,"dwell_avg":130.3,"dwell_med":120.0,"tt":{"일반티켓":92,"보호자":91,"기간한정특가":7,"온라인":7,"다회권":6,"정기권":1},"peak_t":"16:00","peak_v":105,"peak_p1h":0,"late_total":29,"occ":[0,0,17,36,40,59,95,105,70,14,8,4,3],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":266,"user":153,"guard":113,"kids":0,"general":153,"danch":0,"app_guard":71,"app_user":106,"pos_guard":42,"pos_user":45,"online":2,"dwell_avg":158.1,"dwell_med":153.0,"tt":{"보호자":113,"주말+1시간":78,"일반티켓":63,"다회권":5,"만우절특가":4,"온라인":2,"정기권":1},"peak_t":"13:00","peak_v":102,"peak_p1h":43,"late_total":99,"occ":[0,0,33,67,102,89,93,89,91,58,24,11,6],"occ_p1h":[0,0,15,25,43,41,36,25,28,13,3,1,0]}},"남양주":{"y":{"total":617,"user":401,"guard":216,"kids":0,"general":401,"danch":0,"app_guard":0,"app_user":79,"pos_guard":216,"pos_user":322,"online":0,"dwell_avg":118.8,"dwell_med":118.0,"tt":{"일반티켓":377,"보호자":216,"다회권":24},"peak_t":"17:00","peak_v":184,"peak_p1h":0,"late_total":223,"occ":[0,0,62,126,115,151,173,169,184,143,58,22,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":476,"user":300,"guard":176,"kids":0,"general":300,"danch":0,"app_guard":112,"app_user":189,"pos_guard":64,"pos_user":111,"online":0,"dwell_avg":115.0,"dwell_med":118.0,"tt":{"일반티켓":294,"보호자":176,"다회권":5,"기간한정특가":1},"peak_t":"16:00","peak_v":171,"peak_p1h":0,"late_total":137,"occ":[0,0,36,97,105,101,135,171,110,72,47,16,2],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":372,"user":249,"guard":123,"kids":0,"general":249,"danch":0,"app_guard":81,"app_user":175,"pos_guard":42,"pos_user":74,"online":0,"dwell_avg":129.3,"dwell_med":119.0,"tt":{"일반티켓":147,"보호자":123,"주말+1시간":82,"만우절특가":16,"다회권":4},"peak_t":"15:00","peak_v":130,"peak_p1h":46,"late_total":163,"occ":[0,0,18,52,77,83,130,119,117,95,50,18,0],"occ_p1h":[0,0,2,9,26,27,46,39,33,15,7,1,0]}},"동대구":{"y":{"total":338,"user":259,"guard":79,"kids":32,"general":227,"danch":0,"app_guard":0,"app_user":75,"pos_guard":79,"pos_user":156,"online":28,"dwell_avg":139.9,"dwell_med":121.0,"tt":{"일반티켓":193,"보호자":79,"다회권":33,"온라인":28,"오픈런이벤트":5},"peak_t":"16:00","peak_v":147,"peak_p1h":0,"late_total":172,"occ":[0,0,14,51,69,96,145,147,114,79,52,41,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":326,"user":237,"guard":89,"kids":51,"general":186,"danch":0,"app_guard":52,"app_user":140,"pos_guard":37,"pos_user":76,"online":21,"dwell_avg":128.9,"dwell_med":120.0,"tt":{"일반티켓":191,"보호자":89,"온라인":21,"다회권":16,"기간한정특가":8,"정기권":1},"peak_t":"15:00","peak_v":119,"peak_p1h":0,"late_total":102,"occ":[0,0,29,80,84,83,119,107,78,64,30,8,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":297,"user":219,"guard":78,"kids":34,"general":185,"danch":0,"app_guard":57,"app_user":175,"pos_guard":21,"pos_user":38,"online":6,"dwell_avg":166.4,"dwell_med":157.0,"tt":{"주말+1시간":116,"보호자":78,"일반티켓":75,"만우절특가":11,"다회권":9,"온라인":6,"정기권":2},"peak_t":"15:00","peak_v":131,"peak_p1h":54,"late_total":175,"occ":[0,0,30,78,79,93,131,123,81,58,45,37,35],"occ_p1h":[0,0,6,38,42,48,54,57,43,30,21,15,15]}},"반포":{"y":{"total":134,"user":80,"guard":54,"kids":0,"general":80,"danch":0,"app_guard":0,"app_user":12,"pos_guard":54,"pos_user":58,"online":10,"dwell_avg":163.0,"dwell_med":152.0,"tt":{"보호자":54,"일반티켓":42,"오픈런이벤트":16,"다회권":11,"온라인":10,"정기권":1},"peak_t":"17:00","peak_v":57,"peak_p1h":0,"late_total":52,"occ":[0,0,35,43,50,41,31,52,57,40,12,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":109,"user":74,"guard":35,"kids":0,"general":74,"danch":0,"app_guard":0,"app_user":33,"pos_guard":35,"pos_user":35,"online":6,"dwell_avg":145.8,"dwell_med":122.0,"tt":{"일반티켓":63,"보호자":35,"온라인":6,"다회권":4,"정기권":1},"peak_t":"16:00","peak_v":44,"peak_p1h":0,"late_total":27,"occ":[0,0,14,27,30,36,38,44,40,19,8,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":135,"user":92,"guard":43,"kids":0,"general":92,"danch":0,"app_guard":0,"app_user":30,"pos_guard":43,"pos_user":60,"online":2,"dwell_avg":138.4,"dwell_med":129.0,"tt":{"일반티켓":70,"보호자":43,"주말+1시간":17,"정기권":2,"온라인":2,"다회권":1},"peak_t":"17:00","peak_v":66,"peak_p1h":11,"late_total":70,"occ":[0,0,20,23,21,23,33,46,66,39,31,0,0],"occ_p1h":[0,0,5,5,6,6,6,7,11,9,3,0,0]}},"부산":{"y":{"total":272,"user":184,"guard":88,"kids":6,"general":178,"danch":0,"app_guard":0,"app_user":45,"pos_guard":88,"pos_user":123,"online":16,"dwell_avg":131.6,"dwell_med":121.0,"tt":{"일반티켓":149,"보호자":88,"온라인":16,"다회권":14,"오픈런이벤트":5},"peak_t":"15:00","peak_v":124,"peak_p1h":0,"late_total":71,"occ":[0,0,12,38,64,106,124,111,76,44,22,5,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":384,"user":268,"guard":116,"kids":11,"general":257,"danch":0,"app_guard":77,"app_user":191,"pos_guard":39,"pos_user":66,"online":11,"dwell_avg":127.2,"dwell_med":121.0,"tt":{"일반티켓":177,"보호자":116,"다회권":58,"정기권":17,"온라인":11,"기간한정특가":5},"peak_t":"16:00","peak_v":181,"peak_p1h":0,"late_total":71,"occ":[0,0,33,57,99,134,124,181,130,50,21,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":392,"user":268,"guard":124,"kids":20,"general":248,"danch":0,"app_guard":74,"app_user":192,"pos_guard":50,"pos_user":65,"online":11,"dwell_avg":136.4,"dwell_med":125.5,"tt":{"보호자":124,"일반티켓":102,"주말+1시간":96,"만우절특가":33,"정기권":18,"온라인":11,"다회권":8},"peak_t":"15:00","peak_v":168,"peak_p1h":57,"late_total":59,"occ":[0,0,44,88,129,167,168,146,84,42,17,0,0],"occ_p1h":[0,0,14,25,53,71,57,32,18,5,3,0,0]}},"브릭앤아트":{"y":{"total":39,"user":21,"guard":18,"kids":0,"general":21,"danch":0,"app_guard":0,"app_user":0,"pos_guard":18,"pos_user":21,"online":0,"dwell_avg":133.5,"dwell_med":68.0,"tt":{"일반티켓":21,"보호자":18},"peak_t":"14:00","peak_v":19,"peak_p1h":0,"late_total":16,"occ":[0,0,12,13,16,19,17,16,16,16,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":22,"user":14,"guard":8,"kids":0,"general":14,"danch":0,"app_guard":0,"app_user":0,"pos_guard":8,"pos_user":14,"online":0,"dwell_avg":90.9,"dwell_med":100.0,"tt":{"일반티켓":14,"보호자":8},"peak_t":"14:00","peak_v":12,"peak_p1h":0,"late_total":0,"occ":[0,0,6,0,8,12,6,4,0,0,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":32,"user":15,"guard":17,"kids":0,"general":15,"danch":0,"app_guard":0,"app_user":0,"pos_guard":17,"pos_user":15,"online":0,"dwell_avg":107.0,"dwell_med":68.0,"tt":{"보호자":17,"일반티켓":15},"peak_t":"11:00","peak_v":12,"peak_p1h":0,"late_total":3,"occ":[0,0,12,7,8,7,9,6,3,3,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]}},"삼성":{"y":{"total":337,"user":306,"guard":31,"kids":0,"general":306,"danch":0,"app_guard":0,"app_user":35,"pos_guard":31,"pos_user":240,"online":31,"dwell_avg":141.0,"dwell_med":125.0,"tt":{"일반티켓":256,"보호자":31,"온라인":31,"다회권":19},"peak_t":"16:00","peak_v":149,"peak_p1h":0,"late_total":99,"occ":[0,0,55,74,67,86,118,149,93,69,30,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":475,"user":403,"guard":69,"kids":0,"general":403,"danch":3,"app_guard":47,"app_user":148,"pos_guard":22,"pos_user":244,"online":11,"dwell_avg":181.4,"dwell_med":130.0,"tt":{"일반티켓":362,"보호자":69,"다회권":25,"온라인":11,"기간한정특가":5,"단체(제외)":3},"peak_t":"16:00","peak_v":202,"peak_p1h":0,"late_total":145,"occ":[0,47,133,157,138,165,186,202,166,72,73,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":336,"user":305,"guard":29,"kids":0,"general":305,"danch":2,"app_guard":23,"app_user":161,"pos_guard":6,"pos_user":138,"online":6,"dwell_avg":188.7,"dwell_med":173.0,"tt":{"일반티켓":159,"주말+1시간":112,"보호자":29,"다회권":21,"만우절특가":7,"온라인":6,"단체(제외)":2},"peak_t":"17:00","peak_v":141,"peak_p1h":55,"late_total":192,"occ":[0,32,69,90,82,87,116,131,141,120,72,0,0],"occ_p1h":[0,0,25,38,34,23,42,56,55,38,24,0,0]}},"샌디스아일랜드":{"y":{"total":124,"user":67,"guard":57,"kids":0,"general":67,"danch":0,"app_guard":0,"app_user":0,"pos_guard":57,"pos_user":67,"online":0,"dwell_avg":82.2,"dwell_med":66.0,"tt":{"일반티켓":67,"보호자":57},"peak_t":"12:00","peak_v":57,"peak_p1h":0,"late_total":19,"occ":[0,0,17,57,25,9,9,20,14,19,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":76,"user":39,"guard":37,"kids":0,"general":39,"danch":0,"app_guard":0,"app_user":0,"pos_guard":37,"pos_user":39,"online":0,"dwell_avg":78.9,"dwell_med":61.0,"tt":{"일반티켓":39,"보호자":37},"peak_t":"16:00","peak_v":20,"peak_p1h":0,"late_total":2,"occ":[0,0,11,13,15,6,4,20,14,2,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":80,"user":38,"guard":42,"kids":0,"general":38,"danch":0,"app_guard":0,"app_user":0,"pos_guard":42,"pos_user":38,"online":0,"dwell_avg":90.6,"dwell_med":61.0,"tt":{"보호자":42,"일반티켓":38},"peak_t":"11:00","peak_v":33,"peak_p1h":0,"late_total":10,"occ":[0,0,33,25,16,10,7,7,13,10,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]}},"세종":{"y":{"total":815,"user":451,"guard":364,"kids":21,"general":430,"danch":0,"app_guard":0,"app_user":73,"pos_guard":364,"pos_user":378,"online":0,"dwell_avg":151.5,"dwell_med":128.0,"tt":{"일반티켓":405,"보호자":364,"다회권":46},"peak_t":"15:00","peak_v":354,"peak_p1h":0,"late_total":245,"occ":[0,0,156,238,243,252,354,335,242,161,84,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":358,"user":209,"guard":149,"kids":22,"general":187,"danch":0,"app_guard":73,"app_user":115,"pos_guard":76,"pos_user":88,"online":6,"dwell_avg":150.4,"dwell_med":125.0,"tt":{"일반티켓":158,"보호자":149,"다회권":40,"온라인":6,"기간한정특가":5},"peak_t":"15:00","peak_v":176,"peak_p1h":0,"late_total":48,"occ":[0,0,49,80,116,157,176,157,83,34,14,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":233,"user":138,"guard":94,"kids":9,"general":129,"danch":1,"app_guard":59,"app_user":98,"pos_guard":35,"pos_user":36,"online":4,"dwell_avg":162.2,"dwell_med":172.0,"tt":{"보호자":94,"주말+1시간":85,"일반티켓":48,"온라인":4,"만우절특가":1,"단체(제외)":1},"peak_t":"15:00","peak_v":130,"peak_p1h":61,"late_total":32,"occ":[0,0,36,64,61,95,130,119,77,26,6,0,0],"occ_p1h":[0,0,6,15,26,45,61,52,29,11,1,0,0]}},"송파":{"y":{"total":300,"user":169,"guard":131,"kids":20,"general":149,"danch":0,"app_guard":0,"app_user":74,"pos_guard":131,"pos_user":59,"online":36,"dwell_avg":142.1,"dwell_med":125.0,"tt":{"보호자":131,"일반티켓":82,"다회권":36,"온라인":36,"오픈런이벤트":14,"정기권":1},"peak_t":"16:00","peak_v":117,"peak_p1h":0,"late_total":108,"occ":[0,0,47,73,53,86,112,117,99,72,36,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":214,"user":114,"guard":99,"kids":15,"general":99,"danch":1,"app_guard":68,"app_user":85,"pos_guard":31,"pos_user":22,"online":7,"dwell_avg":131.2,"dwell_med":121.0,"tt":{"보호자":99,"일반티켓":88,"다회권":19,"온라인":7,"단체(제외)":1},"peak_t":"15:00","peak_v":87,"peak_p1h":0,"late_total":54,"occ":[0,0,34,52,50,61,87,83,63,37,17,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":260,"user":146,"guard":114,"kids":12,"general":134,"danch":0,"app_guard":87,"app_user":113,"pos_guard":27,"pos_user":33,"online":0,"dwell_avg":159.4,"dwell_med":153.5,"tt":{"보호자":114,"주말+1시간":80,"일반티켓":46,"만우절특가":14,"다회권":5,"정기권":1},"peak_t":"16:00","peak_v":127,"peak_p1h":41,"late_total":104,"occ":[0,0,29,50,71,99,114,127,94,60,34,10,0],"occ_p1h":[0,0,11,21,31,39,42,41,30,18,8,3,0]}},"수원":{"y":{"total":315,"user":183,"guard":132,"kids":20,"general":163,"danch":0,"app_guard":0,"app_user":48,"pos_guard":132,"pos_user":115,"online":20,"dwell_avg":133.8,"dwell_med":121.0,"tt":{"일반티켓":141,"보호자":132,"온라인":20,"오픈런이벤트":9,"다회권":8,"정기권":5},"peak_t":"15:00","peak_v":133,"peak_p1h":0,"late_total":52,"occ":[0,0,33,65,87,119,133,118,88,38,7,7,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":259,"user":149,"guard":110,"kids":17,"general":132,"danch":0,"app_guard":75,"app_user":108,"pos_guard":35,"pos_user":36,"online":5,"dwell_avg":128.4,"dwell_med":120.0,"tt":{"일반티켓":128,"보호자":110,"정기권":14,"온라인":5,"다회권":2},"peak_t":"14:00","peak_v":83,"peak_p1h":0,"late_total":83,"occ":[0,0,37,67,75,83,76,77,58,37,34,12,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":251,"user":154,"guard":97,"kids":14,"general":140,"danch":0,"app_guard":62,"app_user":126,"pos_guard":35,"pos_user":27,"online":1,"dwell_avg":144.8,"dwell_med":144.0,"tt":{"보호자":97,"주말+1시간":85,"일반티켓":52,"정기권":11,"만우절특가":3,"다회권":2,"온라인":1},"peak_t":"14:00","peak_v":104,"peak_p1h":56,"late_total":56,"occ":[0,0,14,54,88,104,100,95,71,39,14,3,0],"occ_p1h":[0,0,3,11,40,56,49,32,19,12,2,0,0]}},"안양":{"y":{"total":95,"user":51,"guard":44,"kids":0,"general":51,"danch":0,"app_guard":0,"app_user":10,"pos_guard":44,"pos_user":34,"online":7,"dwell_avg":140.5,"dwell_med":121.0,"tt":{"보호자":44,"일반티켓":30,"오픈런이벤트":10,"온라인":7,"정기권":2,"다회권":2},"peak_t":"15:00","peak_v":37,"peak_p1h":0,"late_total":17,"occ":[0,0,24,32,32,32,37,21,21,17,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":null,"t":null},"여수":{"y":null,"w":{"total":103,"user":57,"guard":46,"kids":0,"general":57,"danch":0,"app_guard":21,"app_user":40,"pos_guard":25,"pos_user":15,"online":2,"dwell_avg":135.7,"dwell_med":121.0,"tt":{"보호자":46,"일반티켓":45,"정기권":7,"다회권":3,"온라인":2},"peak_t":"16:00","peak_v":51,"peak_p1h":0,"late_total":25,"occ":[0,0,19,18,19,28,44,51,28,14,11,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":128,"user":72,"guard":56,"kids":0,"general":72,"danch":0,"app_guard":33,"app_user":47,"pos_guard":23,"pos_user":23,"online":2,"dwell_avg":144.2,"dwell_med":122.5,"tt":{"보호자":56,"일반티켓":39,"주말+1시간":21,"만우절특가":6,"정기권":4,"온라인":2},"peak_t":"16:00","peak_v":43,"peak_p1h":9,"late_total":37,"occ":[0,0,20,38,41,40,40,43,38,22,15,0,0],"occ_p1h":[0,0,1,7,9,8,6,9,12,8,5,0,0]}},"연수":{"y":{"total":196,"user":109,"guard":87,"kids":0,"general":109,"danch":0,"app_guard":0,"app_user":20,"pos_guard":87,"pos_user":79,"online":10,"dwell_avg":118.0,"dwell_med":118.0,"tt":{"보호자":87,"일반티켓":85,"온라인":10,"정기권":8,"오픈런이벤트":4,"다회권":2},"peak_t":"12:00","peak_v":52,"peak_p1h":0,"late_total":80,"occ":[0,0,40,52,40,50,49,45,40,38,28,12,2],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":204,"user":109,"guard":95,"kids":0,"general":109,"danch":0,"app_guard":55,"app_user":71,"pos_guard":40,"pos_user":38,"online":0,"dwell_avg":137.4,"dwell_med":145.0,"tt":{"보호자":95,"일반티켓":95,"정기권":8,"다회권":6},"peak_t":"17:00","peak_v":85,"peak_p1h":0,"late_total":83,"occ":[0,0,22,35,53,46,65,74,85,48,24,9,2],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":137,"user":74,"guard":63,"kids":0,"general":74,"danch":0,"app_guard":49,"app_user":54,"pos_guard":14,"pos_user":20,"online":0,"dwell_avg":143.3,"dwell_med":144.0,"tt":{"보호자":63,"일반티켓":47,"주말+1시간":16,"다회권":5,"만우절특가":3,"정기권":3},"peak_t":"15:00","peak_v":67,"peak_p1h":10,"late_total":59,"occ":[0,0,18,23,21,46,67,57,46,29,13,11,6],"occ_p1h":[0,0,2,5,5,8,10,11,10,5,0,0,0]}},"영종도":{"y":{"total":62,"user":29,"guard":33,"kids":0,"general":29,"danch":0,"app_guard":0,"app_user":5,"pos_guard":33,"pos_user":24,"online":0,"dwell_avg":132.8,"dwell_med":121.0,"tt":{"보호자":33,"일반티켓":19,"오픈런이벤트":6,"정기권":2,"다회권":2},"peak_t":"13:00","peak_v":28,"peak_p1h":0,"late_total":6,"occ":[0,0,14,26,28,20,22,13,16,4,2,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":73,"user":35,"guard":38,"kids":0,"general":35,"danch":0,"app_guard":23,"app_user":31,"pos_guard":15,"pos_user":4,"online":0,"dwell_avg":134.9,"dwell_med":121.0,"tt":{"보호자":38,"일반티켓":26,"정기권":8,"다회권":1},"peak_t":"15:00","peak_v":41,"peak_p1h":0,"late_total":11,"occ":[0,0,0,0,12,24,41,35,36,11,0,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":43,"user":21,"guard":22,"kids":0,"general":21,"danch":0,"app_guard":12,"app_user":13,"pos_guard":10,"pos_user":8,"online":0,"dwell_avg":130.8,"dwell_med":116.0,"tt":{"보호자":22,"일반티켓":12,"주말+1시간":4,"만우절특가":3,"다회권":1,"정기권":1},"peak_t":"16:00","peak_v":18,"peak_p1h":4,"late_total":2,"occ":[0,0,9,13,9,5,13,18,18,2,0,0,0],"occ_p1h":[0,0,0,0,0,0,4,4,4,0,0,0,0]}},"영통":{"y":{"total":519,"user":388,"guard":130,"kids":0,"general":388,"danch":1,"app_guard":0,"app_user":64,"pos_guard":130,"pos_user":203,"online":121,"dwell_avg":133.7,"dwell_med":146.0,"tt":{"일반티켓":238,"보호자":130,"온라인":121,"다회권":29,"단체(제외)":1},"peak_t":"15:00","peak_v":224,"peak_p1h":0,"late_total":173,"occ":[0,3,52,75,107,151,224,210,142,120,44,9,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":333,"user":246,"guard":87,"kids":0,"general":246,"danch":0,"app_guard":47,"app_user":99,"pos_guard":40,"pos_user":134,"online":13,"dwell_avg":135.0,"dwell_med":145.0,"tt":{"일반티켓":219,"보호자":87,"다회권":13,"온라인":13,"기간한정특가":1},"peak_t":"16:00","peak_v":121,"peak_p1h":0,"late_total":118,"occ":[0,0,56,80,70,76,94,121,94,69,36,12,1],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":289,"user":234,"guard":55,"kids":0,"general":234,"danch":0,"app_guard":28,"app_user":125,"pos_guard":27,"pos_user":92,"online":17,"dwell_avg":151.9,"dwell_med":150.0,"tt":{"일반티켓":123,"주말+1시간":82,"보호자":55,"온라인":17,"다회권":8,"만우절특가":4},"peak_t":"15:00","peak_v":100,"peak_p1h":37,"late_total":154,"occ":[0,0,38,65,72,95,100,100,81,70,45,39,0],"occ_p1h":[0,0,15,26,32,27,37,37,34,27,13,11,0]}},"용인":{"y":{"total":214,"user":117,"guard":97,"kids":11,"general":106,"danch":0,"app_guard":0,"app_user":38,"pos_guard":97,"pos_user":63,"online":16,"dwell_avg":144.5,"dwell_med":124.0,"tt":{"보호자":97,"일반티켓":73,"온라인":16,"오픈런이벤트":14,"정기권":9,"다회권":5},"peak_t":"17:00","peak_v":77,"peak_p1h":0,"late_total":50,"occ":[0,0,38,68,68,66,48,72,77,43,7,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":130,"user":76,"guard":54,"kids":7,"general":69,"danch":0,"app_guard":36,"app_user":48,"pos_guard":18,"pos_user":22,"online":6,"dwell_avg":138.8,"dwell_med":123.0,"tt":{"일반티켓":63,"보호자":54,"정기권":7,"온라인":6},"peak_t":"16:00","peak_v":61,"peak_p1h":0,"late_total":19,"occ":[0,0,16,38,28,39,51,61,37,17,2,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":186,"user":101,"guard":85,"kids":12,"general":89,"danch":0,"app_guard":62,"app_user":85,"pos_guard":23,"pos_user":8,"online":8,"dwell_avg":162.8,"dwell_med":163.0,"tt":{"보호자":85,"주말+1시간":57,"일반티켓":19,"다회권":10,"온라인":8,"정기권":5,"만우절특가":2},"peak_t":"16:00","peak_v":104,"peak_p1h":35,"late_total":44,"occ":[0,0,29,47,55,78,88,104,65,30,14,0,0],"occ_p1h":[0,0,7,14,17,32,33,35,19,11,6,0,0]}},"원주":{"y":{"total":355,"user":185,"guard":170,"kids":51,"general":134,"danch":0,"app_guard":0,"app_user":12,"pos_guard":170,"pos_user":166,"online":7,"dwell_avg":119.5,"dwell_med":119.0,"tt":{"보호자":170,"일반티켓":167,"다회권":7,"온라인":7,"오픈런이벤트":4},"peak_t":"14:00","peak_v":122,"peak_p1h":0,"late_total":72,"occ":[0,18,45,67,88,122,115,90,72,60,12,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":438,"user":239,"guard":199,"kids":59,"general":180,"danch":0,"app_guard":34,"app_user":39,"pos_guard":165,"pos_user":200,"online":0,"dwell_avg":130.4,"dwell_med":120.0,"tt":{"일반티켓":232,"보호자":199,"다회권":7},"peak_t":"14:00","peak_v":156,"peak_p1h":0,"late_total":53,"occ":[0,16,61,112,138,156,148,154,114,35,18,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":518,"user":299,"guard":219,"kids":72,"general":227,"danch":0,"app_guard":37,"app_user":64,"pos_guard":182,"pos_user":233,"online":2,"dwell_avg":124.4,"dwell_med":119.0,"tt":{"일반티켓":240,"보호자":219,"주말+1시간":44,"다회권":9,"만우절특가":4,"온라인":2},"peak_t":"12:00","peak_v":175,"peak_p1h":8,"late_total":92,"occ":[0,49,113,175,132,112,145,119,97,74,18,0,0],"occ_p1h":[0,3,8,8,16,21,24,24,19,10,0,0,0]}},"월계":{"y":{"total":293,"user":176,"guard":117,"kids":0,"general":176,"danch":0,"app_guard":0,"app_user":26,"pos_guard":117,"pos_user":131,"online":19,"dwell_avg":123.7,"dwell_med":117.0,"tt":{"일반티켓":137,"보호자":117,"온라인":19,"다회권":12,"오픈런이벤트":8},"peak_t":"15:00","peak_v":85,"peak_p1h":0,"late_total":125,"occ":[0,0,49,49,58,80,85,78,69,56,35,31,3],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":360,"user":210,"guard":150,"kids":0,"general":210,"danch":0,"app_guard":109,"app_user":151,"pos_guard":41,"pos_user":54,"online":5,"dwell_avg":127.3,"dwell_med":120.0,"tt":{"일반티켓":182,"보호자":150,"다회권":16,"온라인":5,"정기권":4,"기간한정특가":3},"peak_t":"16:00","peak_v":109,"peak_p1h":0,"late_total":144,"occ":[0,0,56,74,83,81,97,109,86,85,47,12,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":256,"user":142,"guard":114,"kids":0,"general":142,"danch":0,"app_guard":83,"app_user":106,"pos_guard":31,"pos_user":36,"online":0,"dwell_avg":123.9,"dwell_med":118.0,"tt":{"보호자":114,"일반티켓":78,"주말+1시간":34,"만우절특가":16,"다회권":9,"정기권":5},"peak_t":"12:00","peak_v":81,"peak_p1h":14,"late_total":79,"occ":[0,0,37,81,66,62,56,65,73,41,24,14,0],"occ_p1h":[0,0,4,14,16,15,9,14,14,8,3,2,0]}},"의왕":{"y":{"total":601,"user":378,"guard":223,"kids":77,"general":301,"danch":0,"app_guard":0,"app_user":86,"pos_guard":223,"pos_user":260,"online":32,"dwell_avg":128.4,"dwell_med":121.0,"tt":{"일반티켓":270,"보호자":223,"오픈런이벤트":45,"온라인":32,"다회권":31},"peak_t":"16:00","peak_v":197,"peak_p1h":0,"late_total":191,"occ":[0,0,63,143,159,159,179,197,183,113,55,23,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":569,"user":359,"guard":209,"kids":66,"general":293,"danch":1,"app_guard":154,"app_user":268,"pos_guard":55,"pos_user":72,"online":19,"dwell_avg":126.8,"dwell_med":120.0,"tt":{"일반티켓":316,"보호자":209,"다회권":20,"온라인":19,"기간한정특가":4,"단체(제외)":1},"peak_t":"16:00","peak_v":201,"peak_p1h":0,"late_total":216,"occ":[0,0,46,121,132,148,174,201,160,122,63,29,2],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":497,"user":336,"guard":161,"kids":43,"general":293,"danch":0,"app_guard":127,"app_user":274,"pos_guard":34,"pos_user":61,"online":1,"dwell_avg":147.0,"dwell_med":128.0,"tt":{"일반티켓":167,"보호자":161,"주말+1시간":124,"만우절특가":23,"다회권":21,"온라인":1},"peak_t":"16:00","peak_v":198,"peak_p1h":59,"late_total":280,"occ":[0,0,85,137,130,113,154,198,183,147,86,47,0],"occ_p1h":[0,0,30,40,45,39,53,59,48,35,19,10,0]}},"인스파이어":{"y":{"total":346,"user":172,"guard":174,"kids":0,"general":172,"danch":0,"app_guard":0,"app_user":20,"pos_guard":174,"pos_user":136,"online":16,"dwell_avg":125.0,"dwell_med":119.0,"tt":{"보호자":174,"일반티켓":144,"온라인":16,"다회권":12},"peak_t":"15:00","peak_v":129,"peak_p1h":0,"late_total":50,"occ":[0,0,22,99,96,104,129,126,82,39,8,3,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":423,"user":233,"guard":190,"kids":0,"general":233,"danch":0,"app_guard":52,"app_user":61,"pos_guard":138,"pos_user":168,"online":4,"dwell_avg":138.0,"dwell_med":119.0,"tt":{"일반티켓":215,"보호자":190,"다회권":12,"온라인":4,"기간한정특가":2},"peak_t":"17:00","peak_v":133,"peak_p1h":0,"late_total":202,"occ":[0,0,47,93,117,101,125,121,133,106,45,31,20],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":356,"user":180,"guard":176,"kids":0,"general":180,"danch":0,"app_guard":70,"app_user":76,"pos_guard":106,"pos_user":99,"online":5,"dwell_avg":127.8,"dwell_med":118.5,"tt":{"보호자":176,"일반티켓":127,"주말+1시간":41,"다회권":5,"온라인":5,"만우절특가":2},"peak_t":"16:00","peak_v":107,"peak_p1h":19,"late_total":133,"occ":[0,0,42,89,99,99,93,107,60,55,36,20,22],"occ_p1h":[0,0,6,13,12,19,14,19,13,11,4,6,4]}},"일산":{"y":null,"w":{"total":151,"user":91,"guard":60,"kids":0,"general":91,"danch":0,"app_guard":39,"app_user":69,"pos_guard":21,"pos_user":22,"online":0,"dwell_avg":127.8,"dwell_med":119.0,"tt":{"일반티켓":70,"보호자":60,"정기권":11,"다회권":10},"peak_t":"15:00","peak_v":59,"peak_p1h":0,"late_total":64,"occ":[0,0,16,26,24,30,59,53,35,33,20,11,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":170,"user":91,"guard":79,"kids":0,"general":91,"danch":0,"app_guard":55,"app_user":75,"pos_guard":24,"pos_user":16,"online":0,"dwell_avg":131.9,"dwell_med":122.0,"tt":{"보호자":79,"일반티켓":47,"주말+1시간":22,"정기권":11,"만우절특가":10,"다회권":1},"peak_t":"15:00","peak_v":61,"peak_p1h":14,"late_total":67,"occ":[0,0,38,47,32,37,61,61,48,30,17,15,5],"occ_p1h":[0,0,4,6,8,14,14,12,9,1,0,0,0]}},"제주":{"y":{"total":336,"user":219,"guard":117,"kids":26,"general":193,"danch":0,"app_guard":0,"app_user":31,"pos_guard":117,"pos_user":188,"online":0,"dwell_avg":133.2,"dwell_med":120.0,"tt":{"일반티켓":180,"보호자":117,"다회권":24,"오픈런이벤트":15},"peak_t":"15:00","peak_v":131,"peak_p1h":0,"late_total":55,"occ":[0,0,60,92,108,97,131,110,54,27,28,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":349,"user":227,"guard":122,"kids":31,"general":196,"danch":0,"app_guard":72,"app_user":129,"pos_guard":50,"pos_user":98,"online":0,"dwell_avg":122.6,"dwell_med":120.0,"tt":{"일반티켓":195,"보호자":122,"다회권":32},"peak_t":"15:00","peak_v":171,"peak_p1h":0,"late_total":34,"occ":[0,0,30,64,77,137,171,135,67,27,7,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":331,"user":217,"guard":114,"kids":28,"general":189,"danch":0,"app_guard":73,"app_user":132,"pos_guard":41,"pos_user":85,"online":0,"dwell_avg":139.0,"dwell_med":127.0,"tt":{"일반티켓":126,"보호자":114,"주말+1시간":63,"만우절특가":17,"다회권":11},"peak_t":"16:00","peak_v":153,"peak_p1h":56,"late_total":77,"occ":[0,0,27,42,57,101,152,153,136,57,15,5,0],"occ_p1h":[0,0,2,2,2,11,42,56,46,16,1,0,0]}},"천안":{"y":{"total":322,"user":201,"guard":121,"kids":44,"general":157,"danch":0,"app_guard":0,"app_user":60,"pos_guard":121,"pos_user":92,"online":49,"dwell_avg":143.2,"dwell_med":124.5,"tt":{"보호자":121,"일반티켓":118,"온라인":49,"다회권":22,"오픈런이벤트":12},"peak_t":"16:00","peak_v":116,"peak_p1h":0,"late_total":79,"occ":[0,0,47,80,86,106,105,116,93,64,15,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":317,"user":197,"guard":120,"kids":39,"general":158,"danch":0,"app_guard":70,"app_user":98,"pos_guard":50,"pos_user":88,"online":11,"dwell_avg":127.7,"dwell_med":120.0,"tt":{"일반티켓":178,"보호자":120,"온라인":11,"다회권":6,"기간한정특가":2},"peak_t":"16:00","peak_v":118,"peak_p1h":0,"late_total":54,"occ":[0,2,48,81,80,80,101,118,92,34,20,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":220,"user":134,"guard":86,"kids":18,"general":116,"danch":0,"app_guard":47,"app_user":70,"pos_guard":39,"pos_user":60,"online":4,"dwell_avg":145.6,"dwell_med":132.0,"tt":{"보호자":86,"일반티켓":67,"주말+1시간":56,"다회권":4,"온라인":4,"만우절특가":3},"peak_t":"14:00","peak_v":92,"peak_p1h":29,"late_total":89,"occ":[0,0,22,50,59,92,88,84,60,53,28,8,0],"occ_p1h":[0,0,4,15,18,29,28,33,17,15,2,0,0]}},"하남":{"y":{"total":498,"user":313,"guard":185,"kids":37,"general":276,"danch":0,"app_guard":0,"app_user":78,"pos_guard":185,"pos_user":148,"online":87,"dwell_avg":136.6,"dwell_med":124.0,"tt":{"보호자":185,"일반티켓":171,"온라인":87,"오픈런이벤트":37,"다회권":18},"peak_t":"15:00","peak_v":189,"peak_p1h":0,"late_total":107,"occ":[0,0,67,129,142,159,189,169,127,76,31,0,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"w":{"total":341,"user":226,"guard":115,"kids":13,"general":213,"danch":0,"app_guard":83,"app_user":156,"pos_guard":32,"pos_user":51,"online":19,"dwell_avg":127.6,"dwell_med":122.0,"tt":{"일반티켓":176,"보호자":115,"다회권":22,"온라인":19,"기간한정특가":9},"peak_t":"15:00","peak_v":167,"peak_p1h":0,"late_total":55,"occ":[0,0,39,84,72,97,167,131,76,35,15,5,0],"occ_p1h":[0,0,0,0,0,0,0,0,0,0,0,0,0]},"t":{"total":300,"user":191,"guard":109,"kids":4,"general":187,"danch":0,"app_guard":85,"app_user":158,"pos_guard":24,"pos_user":30,"online":3,"dwell_avg":158.3,"dwell_med":170.0,"tt":{"주말+1시간":118,"보호자":109,"일반티켓":47,"다회권":19,"만우절특가":4,"온라인":3},"peak_t":"16:00","peak_v":158,"peak_p1h":66,"late_total":99,"occ":[0,0,34,64,72,104,137,158,127,75,24,0,0],"occ_p1h":[0,0,13,22,37,54,73,66,51,24,4,0,0]}}};
+
+const TL = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+const TT_ORDER = ['정가','주말+1시간','만우절특가','기간한정특가','오픈런이벤트','다회권','정기권','보호자','온라인'];
+let charts = [];
+
+function goPage(id, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='occ') buildOccMain();
+}
+
+function pct(a,b){ if(!a&&a!==0||!b&&b!==0) return null; if(a===0) return null; return (b-a)/a*100; }
+function fp(v){ if(v==null) return '-'; return (v>=0?'+':'')+v.toFixed(1)+'%'; }
+function cc(v,t=0){ if(v==null) return ''; return v>t?'up':v<-t?'dn':''; }
+function fv(v){ return v==null||v===undefined?'-':v; }
+
+// 전사 점유 차트
+function buildOccMain(){
+  const cvs = document.getElementById('chartOccMain');
+  if(!cvs||cvs._built) return;
+  cvs._built=true;
+  const yOcc=[21,1125,1922,2023,2384,2808,2712,2177,1473,614,174,5].concat([0]);
+  const wOcc=[65,968,1661,1809,2104,2606,2761,2033,1154,607,166,30,0];
+  const tOcc=[81,965,1657,1766,2034,2431,2481,2044,1329,660,247,74,0];
+  const p1h=[3,197,383,548,674,791,763,590,332,133,49,19,0];
+  const ch = new Chart(cvs,{type:'line',data:{labels:TL,datasets:[
+    {label:'전년',data:yOcc,borderColor:'#3266ad',backgroundColor:'transparent',tension:0.3,pointRadius:2},
+    {label:'전주',data:wOcc,borderColor:'#73726c',backgroundColor:'transparent',tension:0.3,pointRadius:2},
+    {label:'당일',data:tOcc,borderColor:'#D85A30',backgroundColor:'transparent',tension:0.3,pointRadius:2,borderWidth:2},
+    {label:'+1h',data:p1h,borderColor:'#FFA726',backgroundColor:'rgba(255,167,38,0.1)',fill:true,tension:0.3,pointRadius:0,borderDash:[4,3]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{y:{beginAtZero:true,title:{display:true,text:'동시 점유(명)'}},x:{ticks:{font:{size:9},maxTicksLimit:7}}}}});
+  charts.push(ch);
+}
+
+// 점유율 테이블
+function buildOccTable(){
+  const occData = Object.entries(DATA).filter(([c,d])=>d.t).map(([c,d])=>{
+    const t=d.t, y=d.y;
+    const pkp1h = t.peak_v>0 ? Math.round(t.peak_p1h/t.peak_v*100) : 0;
+    const risk = pkp1h>=40?'dn':pkp1h>=25?'warn':t.late_total>=150?'warn':'';
+    const riskLabel = pkp1h>=40?'⚠ 위험':pkp1h>=25?'주의':t.late_total>=150?'운영부담':'정상';
+    return {c, t, y, pkp1h, risk, riskLabel};
+  }).sort((a,b)=>b.pkp1h-a.pkp1h);
+
+  const tbody = document.getElementById('occTable');
+  if(!tbody) return;
+  tbody.innerHTML = occData.map(({c,t,y,pkp1h,risk,riskLabel})=>`
+    <tr>
+      <td>${c}</td>
+      <td>${t.peak_t}</td>
+      <td>${t.peak_v}명</td>
+      <td>${y?y.peak_v+'명':'-'}</td>
+      <td class="${pkp1h>=40?'warn':''}">${pkp1h}%</td>
+      <td class="${t.late_total>=150?'warn':''}">${t.late_total}명</td>
+      <td class="${risk}">${riskLabel}</td>
+    </tr>`).join('');
+}
+
+// 센터별 렌더
+function renderC(cname){
+  charts.forEach(c=>{try{c.destroy()}catch(e){}});
+  charts=[];
+  const cd = DATA[cname];
+  const main = document.getElementById('centerMain');
+  if(!cd){main.innerHTML='';return;}
+  const y=cd.y,w=cd.w,t=cd.t;
+  if(!t){main.innerHTML='<p style="color:#888;padding:20px">당일 데이터 없음</p>';return;}
+
+  const vcy=pct(y?.total,t.total), vcw=pct(w?.total,t.total);
+  const dcy = y&&y.dwell_avg&&t.dwell_avg ? (t.dwell_avg-y.dwell_avg) : null;
+  const pkp = t.peak_v>0?Math.round(t.peak_p1h/t.peak_v*100):0;
+  const p1h = t.tt['주말+1시간']||0, p1hpct = Math.round(p1h/t.total*100);
+
+  let h = `
+  <div class="krow">
+    <div class="kcard"><div class="kl">총방문자 (당일)</div><div class="kv ${vcy!=null&&vcy<-20?'dn':vcy!=null&&vcy>10?'up':''}">${t.total}명</div>
+      <div class="ks"><b class="${cc(vcy,5)}">${fp(vcy)}</b> 전년比 &nbsp; <b class="${cc(vcw,5)}">${fp(vcw)}</b> 전주比</div></div>
+    <div class="kcard"><div class="kl">이용자 (보호자 제외)</div><div class="kv">${t.user}명</div>
+      <div class="ks">전년 ${y?y.user:'-'} · 전주 ${w?w.user:'-'}</div></div>
+    <div class="kcard"><div class="kl">이용자 평균 체류</div><div class="kv ${dcy!=null&&dcy>15?'warn':''}">${t.dwell_avg||'-'}분</div>
+      <div class="ks">전년 ${y?.dwell_avg||'-'}분 &nbsp; <span class="${dcy!=null&&dcy>15?'warn':''}">${dcy!=null?(dcy>=0?'+':'')+dcy.toFixed(0)+'분':'-'}</span></div></div>
+    <div class="kcard"><div class="kl">피크 점유 (${t.peak_t})</div><div class="kv">${t.peak_v}명</div>
+      <div class="ks">피크내 주말+1h <b class="${pkp>=40?'warn':''}">${t.peak_p1h}명(${pkp}%)</b></div></div>
+    <div class="kcard"><div class="kl">주말+1시간 비중</div><div class="kv ${p1hpct>=30?'warn':''}">${p1hpct}%</div>
+      <div class="ks">${p1h}명 · 전년 ${y?.tt?.['주말+1시간']||0}명 · 전주 ${w?.tt?.['주말+1시간']||0}명</div></div>
+    <div class="kcard"><div class="kl">18시 이후 잔류</div><div class="kv ${t.late_total>=150?'warn':''}">${t.late_total}명</div>
+      <div class="ks">전년 ${y?.late_total||'-'} · 전주 ${w?.late_total||'-'}</div></div>
+  </div>`;
+
+  // 방문자 구조
+  h+=`<div class="two">
+  <div class="sec"><div class="sttl">방문자 구조 비교</div>
+  <table><thead><tr><th style="width:100px">구분</th><th class="dy">전년</th><th class="dw">전주</th><th class="dt">당일</th><th>전년比</th></tr></thead><tbody>`;
+  [['총방문','total',true],['이용자','user',false],['— 일반','general',false],['— 키즈','kids',false],['보호자','guard',false]].forEach(([l,k,b])=>{
+    const yv=y?.[k], wv=w?.[k], tv=t[k];
+    const c=pct(yv,tv);
+    h+=`<tr><td style="${b?'font-weight:700':'padding-left:14px;color:#888'}">${l}</td>
+      <td>${fv(yv)}</td><td>${fv(wv)}</td><td style="font-weight:700">${fv(tv)}</td>
+      <td class="${cc(c,5)}">${fp(c)}</td></tr>`;
+  });
+  h+=`</tbody></table></div>
+
+  <div class="sec"><div class="sttl">채널 × 유형</div>
+  <table><thead><tr><th style="width:90px">채널</th><th class="dy">전년</th><th class="dw">전주</th><th class="dt">당일</th><th>전년比</th></tr></thead><tbody>`;
+  [['앱_보호자','app_guard'],['앱_이용자','app_user'],['포스_보호자','pos_guard'],['포스_이용자','pos_user'],['온라인','online']].forEach(([l,k])=>{
+    const yv=y?.[k]??null, wv=w?.[k]??null, tv=t[k];
+    const c=pct(yv,tv);
+    const isNew=yv===0&&tv>0;
+    h+=`<tr><td>${l}</td><td>${fv(yv)}</td><td>${fv(wv)}</td>
+      <td style="font-weight:700">${fv(tv)}</td>
+      <td class="${isNew?'warn':cc(c,10)}">${isNew?'신규↑':fp(c)}</td></tr>`;
+  });
+  h+=`</tbody></table><div class="fn">앱=바운스앱 / 포스=현장 / 온라인=네이버 등</div></div></div>`;
+
+  // 티켓특성
+  const ttAll = new Set([...Object.keys(y?.tt||{}), ...Object.keys(w?.tt||{}), ...Object.keys(t.tt||{})]);
+  const ttList = TT_ORDER.filter(x=>ttAll.has(x));
+  h+=`<div class="sec"><div class="sttl">티켓특성별</div>
+  <table><thead><tr><th style="width:110px">특성</th><th class="dy">전년</th><th class="dw">전주</th><th class="dt">당일</th><th>당일비중</th></tr></thead><tbody>`;
+  ttList.forEach(k=>{
+    const yv=y?.tt?.[k]||0, wv=w?.tt?.[k]||0, tv=t.tt[k]||0;
+    const tp=tv>0?Math.round(tv/t.total*100):0;
+    const isP=['주말+1시간','만우절특가','기간한정특가','오픈런이벤트'].includes(k);
+    h+=`<tr class="${isP&&tv>0?'hl':''}">
+      <td>${k}</td><td class="dim">${yv||'-'}</td><td class="dim">${wv||'-'}</td>
+      <td style="font-weight:700">${tv||'-'}</td>
+      <td class="${tp>=30?'warn':''}">${tp>0?tp+'%':'-'}</td></tr>`;
+  });
+  h+=`</tbody></table><div class="fn">노란 배경 = 프로모션·할인 권종</div></div>`;
+
+  // 체류 + 회전율
+  h+=`<div class="two">
+  <div class="sec"><div class="sttl">체류시간</div>
+  <table><thead><tr><th></th><th class="dy">전년</th><th class="dw">전주</th><th class="dt">당일</th><th>전년比</th></tr></thead><tbody>
+    <tr><td>평균(분)</td><td>${y?.dwell_avg||'-'}</td><td>${w?.dwell_avg||'-'}</td>
+      <td style="font-weight:700;${dcy!=null&&dcy>15?'color:#fb8c00':''}">${t.dwell_avg||'-'}</td>
+      <td class="${dcy!=null&&dcy>15?'warn':''}">${dcy!=null?(dcy>=0?'+':'')+dcy.toFixed(0)+'분':'-'}</td></tr>
+    <tr><td>중앙값(분)</td><td>${y?.dwell_med||'-'}</td><td>${w?.dwell_med||'-'}</td><td style="font-weight:700">${t.dwell_med||'-'}</td><td>-</td></tr>
+    <tr><td>18시이후잔류</td><td>${y?.late_total||'-'}</td><td>${w?.late_total||'-'}</td>
+      <td style="font-weight:700;${t.late_total>=150?'color:#fb8c00':''}">${t.late_total}</td>
+      <td class="${cc(pct(y?.late_total,t.late_total),20)}">${fp(pct(y?.late_total,t.late_total))}</td></tr>
+  </tbody></table></div>
+
+  <div class="sec"><div class="sttl">회전율 지표</div>
+  <table><thead><tr><th>지표</th><th class="dy">전년</th><th class="dt">당일</th><th>상태</th></tr></thead><tbody>
+    <tr><td>피크시간</td><td>${y?.peak_t||'-'}</td><td>${t.peak_t}</td><td style="text-align:left;color:#888;font-size:10px">${y?.peak_t!==t.peak_t&&y?'피크 시간 이동':'동일'}</td></tr>
+    <tr><td>피크점유</td><td>${y?.peak_v||'-'}명</td><td>${t.peak_v}명</td><td class="${cc(pct(y?.peak_v,t.peak_v),5)}" style="text-align:left">${fp(pct(y?.peak_v,t.peak_v))}</td></tr>
+    <tr><td>피크내 +1h</td><td>-</td><td class="${pkp>=40?'warn':''}">${t.peak_p1h}명(${pkp}%)</td>
+      <td style="text-align:left;color:#888;font-size:10px">${pkp>=40?'⚠ 위험':pkp>=25?'주의':'정상'}</td></tr>
+  </tbody></table></div></div>`;
+
+  // 점유 차트
+  h+=`<div class="sec"><div class="sttl">시간대별 동시 점유 (입장~퇴장 기준)</div>
+  <div style="position:relative;width:100%;height:200px;margin:8px 0"><canvas id="cchart"></canvas></div>
+  <div class="legend">
+    <span><i style="background:#3266ad"></i>전년(25/04/06)</span>
+    <span><i style="background:#73726c"></i>전주(26/03/29)</span>
+    <span><i style="background:#D85A30"></i>당일(26/04/05)</span>
+    <span><i style="background:#FFA726;opacity:0.6"></i>당일 주말+1h</span>
+  </div></div>`;
+
+  // 인사이트
+  h+=`<div class="sec"><div class="sttl">인사이트</div><div id="ibox"></div></div>`;
+
+  main.innerHTML = h;
+
+  // 차트
+  const cvs = document.getElementById('cchart');
+  if(cvs){
+    const ch = new Chart(cvs,{type:'line',data:{labels:TL,datasets:[
+      {label:'전년',data:y?.occ||[],borderColor:'#3266ad',backgroundColor:'transparent',tension:0.3,pointRadius:2},
+      {label:'전주',data:w?.occ||[],borderColor:'#73726c',backgroundColor:'transparent',tension:0.3,pointRadius:2},
+      {label:'당일',data:t.occ,borderColor:'#D85A30',backgroundColor:'transparent',tension:0.3,pointRadius:2,borderWidth:2},
+      {label:'+1h',data:t.occ_p1h,borderColor:'#FFA726',backgroundColor:'rgba(255,167,38,0.1)',fill:true,tension:0.3,pointRadius:0,borderDash:[4,3]},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,title:{display:true,text:'점유(명)'}},x:{ticks:{font:{size:9},maxTicksLimit:7}}}}});
+    charts.push(ch);
+  }
+
+  // 인사이트
+  const ibox = document.getElementById('ibox');
+  if(ibox){ const ins=[]; 
+    const vc=pct(y?.total,t.total);
+    if(vc!=null&&vc<-30) ins.push({c:'red',t:`<b>방문자 급감 ${vc.toFixed(0)}% (전년比)</b>: ${y.total}→${t.total}명. 프로모션 이상의 구조적 수요 이탈 가능성.`});
+    else if(vc!=null&&vc>20) ins.push({c:'green',t:`<b>방문자 증가 +${vc.toFixed(0)}% (전년比)</b>: ${y?.total||'-'}→${t.total}명. 단, 단가·회전율 병행 확인 필요.`});
+    else if(vc!=null&&vc<-10) ins.push({c:'orange',t:`<b>방문자 소폭 감소 ${vc.toFixed(0)}% (전년比)</b>.`});
+    if(p1hpct>=35) ins.push({c:'red',t:`<b>주말+1시간 ${p1hpct}%(${p1h}명)</b>: 이용자 1/3 이상이 +1h. 피크 점유의 ${pkp}% 차지. 신규 입장 수용력 저하.`});
+    else if(p1hpct>=20) ins.push({c:'orange',t:`<b>주말+1시간 ${p1hpct}%(${p1h}명)</b>: 피크의 ${pkp}%. 회전율 주의.`});
+    const mau=t.tt['만우절특가']||0; if(mau>=8) ins.push({c:'orange',t:`<b>만우절 특가 ${mau}명</b>: 4/1 30% 할인 판매분 당일 사용. 단가 손실.`});
+    if(y){const apy=Math.round((y.app_guard+y.app_user)/y.total*100),apt=Math.round((t.app_guard+t.app_user)/t.total*100); if(apt-apy>30) ins.push({c:'orange',t:`<b>앱 채널 ${apy}%→${apt}% (+${apt-apy}%p)</b>: 포스 정가 수요가 앱 할인 채널로 대거 이동.`});}
+    if(y&&y.app_guard===0&&t.app_guard>0) ins.push({c:'blue',t:`<b>앱 보호자 신규 등장 ${t.app_guard}명</b>: 전년 포스만 판매→앱에서도 보호자 판매 시작. 포스 보호자 감소는 채널 이동.`});
+    if(y){const pc=pct(y.pos_user,t.pos_user); if(pc!=null&&pc<-50) ins.push({c:'red',t:`<b>포스 이용자 급감 ${pc.toFixed(0)}% (${y.pos_user}→${t.pos_user}명)</b>: 현장 정가 구매 고객 대부분이 앱으로 이동.`});}
+    if(y&&y.kids>5){const kc=pct(y.kids,t.kids); if(kc!=null&&kc<-40) ins.push({c:'orange',t:`<b>키즈 ${kc.toFixed(0)}% (${y.kids}→${t.kids}명)</b>: 고단가 가족 세그먼트 이탈.`});}
+    if(dcy!=null&&dcy>20) ins.push({c:'orange',t:`<b>체류 +${dcy.toFixed(0)}분 증가 (${y?.dwell_avg}→${t.dwell_avg}분)</b>: 주말+1시간 집중으로 회전율 저하.`});
+    if(t.late_total>150) ins.push({c:'red',t:`<b>18시이후 잔류 ${t.late_total}명</b>: 마감 운영 부담. 전년 ${y?.late_total||'-'}명 대비 ${fp(pct(y?.late_total,t.late_total))}.`});
+    if(y){const dv_y=y.tt['다회권']||0,dv_t=t.tt['다회권']||0; if(dv_y>10&&dv_t<dv_y/2) ins.push({c:'orange',t:`<b>다회권 ${dv_y}→${dv_t}명 (${fp(pct(dv_y,dv_t))})</b>: 재방문 충성 고객 이탈 신호.`});}
+    if(ins.length===0) ins.push({c:'gray',t:'특별한 이상 신호 없음.'});
+    ibox.innerHTML=ins.map(i=>`<div class="insight ${i.c}">${i.t}</div>`).join('');
+  }
+}
+
+// 초기화
+const sel = document.getElementById('csel');
+Object.keys(DATA).sort().forEach(c=>{
+  const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
+});
+sel.value='삼성'; renderC('삼성');
+buildOccTable();
+</script>
+</body></html>
